@@ -24,8 +24,8 @@ function App() {
     localStorage.setItem("todos", JSON.stringify(todos))
   }
 
-  const toggleFinished = () => {
-    
+  const toggleFinished = (e) => {
+    setshowFinished(!showFinished)
   }
   
 
@@ -75,28 +75,32 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-5 rounded-xl p-5 bg-cyan-600 min-h-[80vh]">
-        <div className="addtask my-5">
+      <div className="md:container mx-auto my-5 rounded-xl p-5 bg-cyan-600 min-h-[80vh] md:w-[40%]">
+      <h1 className="font-bold text-center text-2xl">EDT- Manage Your Todos at one Place</h1>
+        <div className="addtask my-5 flex flex-col gap-3">
           <h2 className="text-lg font-bold">Add todo</h2>
+          <div className="flex">
+
           <input
             onChange={handleChange}
             value={todo}
             type="text"
-            className="bg-amber-50 w-1/5"
-          />
+            className="bg-amber-50 w-full rounded-lg px-4 py-1" 
+            />
           <button
-            onClick={handleAdd}
-            className=" bg-cyan-800 hover:bg-cyan-900 p-3 py-1 text-white rounded-md mx-5"
-          >
+            onClick={handleAdd} disabled={todo.length<=3}
+            className=" bg-cyan-800 hover:bg-cyan-900 disabled:bg-cyan-800 p-3 py-1 text-white rounded-md mx-2"
+            >
             Add
           </button>
+            </div>
         </div>
-        <input type="checkbox" checked={showFinished} id="" />Show Finished
-        <h2 className="text-lg font-bold">Your Todos</h2>
+        <input onChange={toggleFinished} type="checkbox" checked={showFinished} id="" />Show Finished
+        <h2 className="text-lg font-bold my-4">Your Todos</h2>
         <div className="todos">
           {todos.length ===0 && <div className="m-5">No Todos to display</div>}
           {todos.map(item=>{
-            return<div key={item.id} className="task flex w-1/4 my-3 justify-between">
+            return (showFinished || !item.isCompleted) && <div key={item.id} className="todo md:w-1/2 flex my-3 justify-between">
                 <input name={item.id} onChange={handleCheckbox} type="checkbox" checked={item.isCompleted} id="" />
                 <div className={item.isCompleted?"line-through" : ""}>
                   {item.todo}
